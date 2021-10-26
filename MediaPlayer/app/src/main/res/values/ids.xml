@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="layoutApp" type="id" />
+    <item name="imgApp" type="id" />
+    <item name="txtAppName" type="id" />
+    <item name="songProgressBar" type="id" />
+    <item name="txtStartTime" type="id" />
+    <item name="txtFinalTime" type="id" />
+    <item name="txtSongName" type="id" />
+    <item name="layoutPlayerButton" type="id" />
+    <item name="btnPrevious" type="id" />
+    <item name="btnPlay" type="id" />
+    <item name="btnNext" type="id" />
+</resources>
