@@ -9,7 +9,8 @@ import java.util.HashMap;
 
 public class SongsManager {
 
-    final File MUSIC_FOLDER = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+    final File MUSIC_FOLDER =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
     final ArrayList<HashMap<String, String>> songsList = new ArrayList<>();
 
     public ArrayList<HashMap<String, String>> getPlayList() {

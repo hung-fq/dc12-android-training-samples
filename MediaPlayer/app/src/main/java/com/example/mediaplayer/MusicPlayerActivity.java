@@ -3,9 +3,11 @@ package com.example.mediaplayer;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ import java.util.HashMap;
 
 public class MusicPlayerActivity extends Activity implements SeekBar.OnSeekBarChangeListener {
 
+    private int currentSongIndex = 0;
+
     private final static int PERMISSION_REQUEST = 1;
     public final static String ACTION_PLAY = "com.player.actionPlay";
     public final static String ACTION_PAUSE = "com.player.actionPause";
@@ -33,7 +37,12 @@ public class MusicPlayerActivity extends Activity implements SeekBar.OnSeekBarCh
     public final static String ACTION_NEXT = "com.player.actionNext";
     public final static String ACTION_PREVIOUS = "com.player.actionPrevious";
     public final static String ACTION_SKIP = "com.player.actionSkip";
+    public final static String ACTION_CHANGE_TO_BTN_PAUSE = "com.player.actionChangeToBtnPause";
+    public final static String ACTION_CHANGE_TO_BTN_PLAY = "com.player.actionChangeToBtnPlay";
     public final static String ACTION_PLAY_FROM_LIST = "com.player.actionPlayFromList";
+    public final static String ACTION_INIT_MUSIC_PLAYER = "com.player.actionInitMusicPlayer";
+
+    private final Handler mediaHandler = new Handler();
 
     private ArrayList<HashMap<String, String>> songsList;
     private ImageButton btnPlay;
@@ -41,25 +50,6 @@ public class MusicPlayerActivity extends Activity implements SeekBar.OnSeekBarCh
     private Utilities utils;
     private MusicPlayerState musicPlayerState;
     private MusicPlayerService myMusicPlayerService;
-    private MusicPlayerServiceBound musicPlayerServiceBound = MusicPlayerServiceBound.NOT_BOUND;
-
-    private int currentSongIndex = 0;
-
-    private final Handler mediaHandler = new Handler();
-
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MusicPlayerService.LocalBinder binder = (MusicPlayerService.LocalBinder) service;
-            myMusicPlayerService = binder.getService();
-            musicPlayerServiceBound = MusicPlayerServiceBound.BOUND;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            musicPlayerServiceBound = MusicPlayerServiceBound.NOT_BOUND;
-        }
-    };
 
     private final Runnable updateTimeTask = new Runnable() {
         @SuppressLint("SetTextI18n")
@@ -78,6 +68,44 @@ public class MusicPlayerActivity extends Activity implements SeekBar.OnSeekBarCh
             if (progress == 100) {
                 btnPlay.setImageResource(R.drawable.btn_play_circle_filled);
             }
+        }
+    };
+
+    private MusicPlayerServiceBound musicPlayerServiceBound = MusicPlayerServiceBound.NOT_BOUND;
+
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MusicPlayerService.LocalBinder binder = (MusicPlayerService.LocalBinder) service;
+            myMusicPlayerService = binder.getService();
+            musicPlayerServiceBound = MusicPlayerServiceBound.BOUND;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            musicPlayerServiceBound = MusicPlayerServiceBound.NOT_BOUND;
+        }
+    };
+
+    private final BroadcastReceiver changeToBtnPause = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            changeToBtnPause();
+        }
+    };
+
+    private final BroadcastReceiver changeToBtnPlay = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            changeToBtnPlay();
+        }
+    };
+
+    private final BroadcastReceiver initMusicPlayer = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            currentSongIndex = intent.getExtras().getInt("currentSongIndex");
+            initMusicPlayer(currentSongIndex);
         }
     };
 
@@ -116,6 +144,24 @@ public class MusicPlayerActivity extends Activity implements SeekBar.OnSeekBarCh
             initMusicPlayer(0);
         }
         onPlaylistButtonClick();
+        registerChangeToBtnPause();
+        registerChangeToBtnPlay();
+        registerInitMusicPlayer();
+    }
+
+    private void registerChangeToBtnPause() {
+        IntentFilter intentFilter = new IntentFilter(MusicPlayerActivity.ACTION_CHANGE_TO_BTN_PAUSE);
+        registerReceiver(changeToBtnPause, intentFilter);
+    }
+
+    private void registerChangeToBtnPlay() {
+        IntentFilter intentFilter = new IntentFilter(MusicPlayerActivity.ACTION_CHANGE_TO_BTN_PLAY);
+        registerReceiver(changeToBtnPlay, intentFilter);
+    }
+
+    private void registerInitMusicPlayer() {
+        IntentFilter intentFilter = new IntentFilter(MusicPlayerActivity.ACTION_INIT_MUSIC_PLAYER);
+        registerReceiver(initMusicPlayer, intentFilter);
     }
 
     private void changeToBtnPause() {
@@ -261,5 +307,7 @@ public class MusicPlayerActivity extends Activity implements SeekBar.OnSeekBarCh
         if (musicPlayerServiceBound == MusicPlayerServiceBound.BOUND) {
             unbindService(serviceConnection);
         }
+        unregisterReceiver(changeToBtnPause);
+        unregisterReceiver(changeToBtnPlay);
     }
 }

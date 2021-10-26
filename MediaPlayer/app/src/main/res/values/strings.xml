@@ -9,4 +9,8 @@
     <string name="img_btn_playlist_description">Playlist</string>
     <string name="default_start_time">00:00</string>
     <string name="default_final_time">--:--</string>
+    <string name="notification_id">101</string>
+    <string name="channel_id">MP001</string>
+    <string name="channel_name">Music Player</string>
+    <string name="channel_description">Music Player Channel</string>
 </resources>
