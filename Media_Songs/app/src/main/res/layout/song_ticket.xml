@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="05pt"
+        android:layout_weight="1"
+        android:background="@drawable/background_ticket"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSongName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Songs name"
+                android:textSize="27sp" />
+
+            <TextView
+                android:id="@+id/tvAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Author"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4sp"
+            android:layout_weight="0"
+            android:background="@drawable/button_background"
+            android:text="Play" />
+    </LinearLayout>
+
+</LinearLayout>

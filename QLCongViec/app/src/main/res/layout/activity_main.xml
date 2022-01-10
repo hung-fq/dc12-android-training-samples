@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:context=".MainActivity"
+		android:padding="20dp"
+		android:orientation="vertical">
+
+	<TextView
+			android:textStyle="bold"
+			android:layout_marginTop="20dp"
+			android:gravity="center"
+			android:textSize="20sp"
+			android:background="#2196F3"
+			android:text="Quản lý công việc"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"></TextView>
+
+	<EditText
+			android:id="@+id/edtCongViec"
+			android:layout_marginTop="20dp"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="Nhập công việc"
+			android:minHeight="48dp"></EditText>
+
+	<EditText
+			android:id="@+id/edtNoiDung"
+			android:layout_marginTop="20dp"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:hint="Nhập nội dung"
+			android:minHeight="48dp"></EditText>
+	
+	<LinearLayout
+			android:weightSum="10"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+		<TextView
+				android:layout_weight="7"
+				android:id="@+id/txtNgayCongViec"
+				android:hint="Ngày công việc"
+				android:textColor="#F60606"
+				android:textSize="18sp"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"></TextView>
+		<Button
+				android:layout_weight="3"
+				android:text="Chọn ngày"
+				android:id="@+id/btnChonNgay"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"></Button>
+	</LinearLayout>
+
+	<LinearLayout
+			android:weightSum="10"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+		<TextView
+				android:layout_weight="7"
+				android:id="@+id/txtGioCongViec"
+				android:hint="Giờ công việc"
+				android:textColor="#F60606"
+				android:textSize="18sp"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"></TextView>
+		<Button
+				android:layout_weight="3"
+				android:text="Chọn giờ"
+				android:id="@+id/btnChonGio"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"></Button>
+	</LinearLayout>
+
+	<TextView
+			android:layout_marginTop="10dp"
+			android:background="#FFC107"
+			android:height="4dp"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"></TextView>
+
+	<Button
+			android:id="@+id/btnThemCongViec"
+			android:layout_marginTop="20dp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Thêm công việc"
+			android:layout_gravity="center">
+	</Button>
+
+	<TextView
+			android:layout_marginTop="20dp"
+			android:textSize="20sp"
+			android:background="#2196F3"
+			android:text="Danh sách công việc"
+			android:layout_width="match_parent"
+			android:textStyle="italic"
+			android:layout_height="wrap_content"></TextView>
+
+	<ListView
+			android:id="@+id/lvDanhSachCongViec"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			></ListView>
+</LinearLayout>
