@@ -4,15 +4,19 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import java.lang.Exception
+import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.set
 
 class MainActivity : AppCompatActivity() {
     var listSongs = ArrayList<SongInfo>()
@@ -27,10 +31,10 @@ class MainActivity : AppCompatActivity() {
             Toast.LENGTH_LONG
         ).show()
         //load list songs
-        LoadURLOnline()
+        //LoadURLOnline()
 
         //check users permission
-        //CheckUserPermision()
+        CheckUserPermision()
 
         //load list in View
         adapter = MySongAdapter(listSongs)
@@ -186,18 +190,24 @@ class MainActivity : AppCompatActivity() {
         if (cursor != null) {
             Log.d("AZ", cursor.toString())
             if (cursor!!.moveToFirst()) {
-                do {
-                    val songURL =
-                        cursor!!.getString(cursor!!.getColumnIndex(MediaStore.Audio.Media.DATA))
-                    val songAuthor =
-                        cursor!!.getString(cursor!!.getColumnIndex(MediaStore.Audio.Media.ARTIST))
-                    val songName =
-                        cursor!!.getString(cursor!!.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))
-                    System.out.println(songURL)
-                    listSongs.add(SongInfo(songName, songAuthor, songURL))
+                val MUSIC_FOLDER =
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+                val fileExtensionFilter: FileExtensionFilter =
+                    FileExtensionFilter()
 
-                } while (cursor!!.moveToFirst())
+                val mp3Files: Array<File> =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).listFiles()
+
+                if (mp3Files != null && mp3Files.size > 0) {
+                    for (file in mp3Files) {
+                        val song = HashMap<String, String>()
+                        song["songTitle"] = file.name.substring(0, file.name.length - 6)
+                        song["songPath"] = file.path
+                        song["author"]= file.name.substring(0, file.name.length - 10)
+                        listSongs.add(SongInfo(song["songTitle"].toString(), song["author"].toString(), song["songPath"].toString()))
+                    }
+                }
             }
+
             cursor!!.close()
             adapter = MySongAdapter(listSongs)
             findViewById<ListView>(R.id.lsListSong).adapter = adapter
@@ -208,4 +218,15 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         Toast.makeText(this, "Cua so da duoc dong lai!", Toast.LENGTH_LONG).show()
     }
+
+    class FileExtensionFilter {
+        fun accept(dir: File?, name: String): Boolean {
+            return name.endsWith(".mp3") || name.endsWith(".MP3")
+        }
+
+    }
 }
+
+
+
+
